@@ -4,7 +4,7 @@
  * Created on 21 de Junho de 2008, 19:05
  */
 
-package br.cesjf.br;
+package br.cesjf.lp3.estoque.app;
 
 import java.util.ArrayList;
 

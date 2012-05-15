@@ -1,4 +1,4 @@
-package br.cesjf.br;
+package br.cesjf.lp3.estoque.app;
 
 import javax.swing.JFrame;
 

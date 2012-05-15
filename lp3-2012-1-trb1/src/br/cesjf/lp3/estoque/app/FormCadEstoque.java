@@ -3,7 +3,7 @@
  *
  * Created on 13 de Junho de 2008, 22:41
  */
-package br.cesjf.br;
+package br.cesjf.lp3.estoque.app;
 
 import javax.swing.JOptionPane;
 
