@@ -6,8 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 
-public class EstoqueDAO {
-    
+public class EstoqueDAO {    
 
     private Connection conexao;
     private PreparedStatement operacaoCadastrar;
