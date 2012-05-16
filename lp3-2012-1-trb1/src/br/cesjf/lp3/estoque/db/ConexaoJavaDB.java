@@ -17,7 +17,7 @@ public class ConexaoJavaDB {
     public static Connection getConnection() throws Exception {
         Class.forName("org.apache.derby.jdbc.ClientDriver");
         if (conexao == null) {
-            conexao = DriverManager.getConnection("jdbc:derby://localhost:1527/lp3-2012-exm", "usuario", "senha");
+            conexao = DriverManager.getConnection("jdbc:derby://localhost:1527/lp3-2012-db", "usuario", "senha");
         }
         return conexao;
     }
