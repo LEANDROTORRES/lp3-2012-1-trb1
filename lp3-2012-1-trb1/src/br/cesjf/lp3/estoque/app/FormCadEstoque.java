@@ -14,7 +14,13 @@ public class FormCadEstoque extends javax.swing.JDialog {
     public FormCadEstoque(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);        
+        try {
+            estoque = new Estoque();
+            estoqueDao = new EstoqueDAO();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void LimparCampos() {

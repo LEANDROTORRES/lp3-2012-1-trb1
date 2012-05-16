@@ -21,7 +21,7 @@ public class EstoqueDAO {
         operacaoAtualizar = conexao.prepareStatement("UPDATE estoque set quantidade = ? WHERE filial = ? AND produto = ?");
         operacaoExcluir = conexao.prepareStatement("DELETE FROM estoque WHERE filial = ? AND produto = ?");
         operacaoBusca = conexao.prepareStatement("SELECT * FROM estoque WHERE filial = ? AND produto = ?");
-        operacaoListar = conexao.prepareStatement("SELECT * FROM reserva");
+        //operacaoListar = conexao.prepareStatement("SELECT * FROM reserva");
     }
 
     public void cadastrar(Estoque estoque) throws Exception {
