@@ -5,8 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-
-public class EstoqueDAO {    
+public class EstoqueDAO {
 
     private Connection conexao;
     private PreparedStatement operacaoCadastrar;
@@ -47,22 +46,30 @@ public class EstoqueDAO {
         operacaoExcluir.executeUpdate();
     }
 
-    public Estoque busca(Estoque estoque)throws Exception {
+    public Estoque busca(Estoque estoque) throws Exception {
         operacaoBusca.clearParameters();
         operacaoBusca.setString(1, estoque.getFilial());
         operacaoBusca.setString(2, estoque.getProduto());
         ResultSet resultado = operacaoBusca.executeQuery();
 
-        if (resultado.next()) {            
-            Estoque estoqueResultado = new Estoque();
+        Estoque estoqueResultado = new Estoque();
+        if (resultado.next()) {
             estoqueResultado.setFilial(resultado.getString("filial"));
             estoqueResultado.setProduto(resultado.getString("produto"));
             estoqueResultado.setQuantidade(resultado.getInt("quantidade"));
-           
             return estoqueResultado;
         } else {
-            throw new Exception("Nenhum registro encontrado!");
+            return estoqueResultado = null;
         }
 
+    }
+
+    public void cad(Estoque estoque) throws Exception {
+        Estoque est = busca(estoque);
+        if (est != null) {
+            atualizar(estoque);
+        } else {
+            cadastrar(estoque);
+        }
     }
 }

@@ -13,7 +13,6 @@ import java.sql.DriverManager;
  */
 public class ConexaoJavaDB {
     private static Connection conexao = null;
-
     
     public static Connection getConnection() throws Exception {
         Class.forName("org.apache.derby.jdbc.ClientDriver");
