@@ -2,8 +2,6 @@ package br.cesjf.lp3.estoque.app;
 
 import br.cesjf.lp3.estoque.classe.Estoque;
 import br.cesjf.lp3.estoque.db.EstoqueDAO;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class FormCadEstoque extends javax.swing.JDialog {
@@ -172,7 +170,7 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         JOptionPane.showMessageDialog(null, "Preenchimento obrigatório de todos os campos!",
                 "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
     } else {
-
+        
         estoque.setFilial(jFilial.getText());
         estoque.setProduto(jProduto.getText());
         estoque.setQuantidade(Integer.parseInt(jQuantidade.getText()));
@@ -202,18 +200,18 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     }//GEN-LAST:event_jExcluirActionPerformed
 
     private void jProdutoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jProdutoFocusLost
-        estoque.setFilial(jFilial.getText());
-        estoque.setProduto(jProduto.getText());
-        
-        try {
-            estoque = estoqueDao.busca(estoque);
-        } catch (Exception ex) {
-            estoque = null;
-        }
-
-        if (estoque != null) {
-            jQuantidade.setText(String.valueOf(estoque.getQuantidade()));
-        }
+//        estoque.setFilial(jFilial.getText());
+//        estoque.setProduto(jProduto.getText());
+//        
+//        try {
+//            estoque = estoqueDao.busca(estoque);
+//        } catch (Exception ex) {
+//            estoque = null;
+//        }
+//
+//        if (estoque != null) {
+//            jQuantidade.setText(String.valueOf(estoque.getQuantidade()));
+//        }        
     }//GEN-LAST:event_jProdutoFocusLost
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {

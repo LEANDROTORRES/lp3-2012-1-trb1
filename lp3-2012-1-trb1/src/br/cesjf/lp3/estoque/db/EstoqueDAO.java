@@ -4,6 +4,8 @@ import br.cesjf.lp3.estoque.classe.Estoque;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EstoqueDAO {
 
@@ -13,6 +15,7 @@ public class EstoqueDAO {
     private PreparedStatement operacaoExcluir;
     private PreparedStatement operacaoBusca;
     private PreparedStatement operacaoListar;
+    private PreparedStatement operacaoAtualizarQTDDestino;
 
     public EstoqueDAO() throws Exception {
         conexao = ConexaoJavaDB.getConnection();
@@ -20,7 +23,8 @@ public class EstoqueDAO {
         operacaoAtualizar = conexao.prepareStatement("UPDATE estoque set quantidade = ? WHERE filial = ? AND produto = ?");
         operacaoExcluir = conexao.prepareStatement("DELETE FROM estoque WHERE filial = ? AND produto = ?");
         operacaoBusca = conexao.prepareStatement("SELECT * FROM estoque WHERE filial = ? AND produto = ?");
-        //operacaoListar = conexao.prepareStatement("SELECT * FROM reserva");
+        operacaoListar = conexao.prepareStatement("SELECT * FROM estoque");
+        //operacaoAtualizarQTDDestino = conexao.prepareStatement("UPDATE estoque SET ");
     }
 
     public void cadastrar(Estoque estoque) throws Exception {
@@ -63,6 +67,19 @@ public class EstoqueDAO {
         }
 
     }
+    
+    public List<Estoque> listAll() throws Exception {
+        ResultSet resultados = operacaoListar.executeQuery();
+        List<Estoque> reservas = new ArrayList<Estoque>();
+        while (resultados.next()) {
+            Estoque estoque = new Estoque();
+            estoque.setFilial(resultados.getString("filial"));
+            estoque.setProduto(resultados.getString("produto"));
+            estoque.setQuantidade(resultados.getInt("quantidade"));
+            reservas.add(estoque);
+        }
+        return reservas;
+    }
 
     public void cad(Estoque estoque) throws Exception {
         Estoque est = busca(estoque);
@@ -71,5 +88,40 @@ public class EstoqueDAO {
         } else {
             cadastrar(estoque);
         }
+    }
+    
+    public void transferir(String FilialOrigem, Estoque estoque) throws Exception{
+        Estoque estD = busca(estoque);
+        
+        Estoque estoqueO = new Estoque();
+        estoqueO.setFilial(FilialOrigem);
+        estoqueO.setProduto(estoque.getProduto());
+        Estoque estO = busca(estoqueO);
+        if (estD != null) {
+            Estoque estoqueDestino = new Estoque();
+            estoqueDestino.setFilial(estoque.getFilial());
+            estoqueDestino.setProduto(estoque.getProduto());
+            estoqueDestino.setQuantidade(estoque.getQuantidade() + estD.getQuantidade());
+            atualizar(estoqueDestino);
+            
+            Estoque EstoqueOrigem = new Estoque();            
+            EstoqueOrigem.setFilial(FilialOrigem);
+            EstoqueOrigem.setProduto(estoque.getProduto());
+            EstoqueOrigem.setQuantidade(estO.getQuantidade() - estoque.getQuantidade());
+            atualizar(EstoqueOrigem);            
+            
+        } else {
+            Estoque estoqueDestino = new Estoque();
+            estoqueDestino.setFilial(estoque.getFilial());
+            estoqueDestino.setProduto(estoque.getProduto());
+            estoqueDestino.setQuantidade(estoque.getQuantidade());
+            cadastrar(estoque);
+            
+            Estoque EstoqueOrigem = new Estoque();            
+            EstoqueOrigem.setFilial(FilialOrigem);
+            EstoqueOrigem.setProduto(estoque.getProduto());
+            EstoqueOrigem.setQuantidade(estO.getQuantidade() - estoque.getQuantidade());
+            atualizar(EstoqueOrigem);            
+        }                
     }
 }
