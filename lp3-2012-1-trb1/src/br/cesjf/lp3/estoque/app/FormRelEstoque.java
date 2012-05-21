@@ -1,13 +1,28 @@
 package br.cesjf.lp3.estoque.app;
 
-import java.util.ArrayList;
+import br.cesjf.lp3.estoque.classe.Estoque;
+import br.cesjf.lp3.estoque.db.EstoqueDAO;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 public class FormRelEstoque extends javax.swing.JDialog {
+    
+    Estoque estoque;
+    EstoqueDAO estoqueDao;
 
     public FormRelEstoque(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        
+        try {
+            estoque = new Estoque();
+            estoqueDao = new EstoqueDAO();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -33,7 +48,7 @@ public class FormRelEstoque extends javax.swing.JDialog {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 204, 204));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/relatorios.png"))); // NOI18N
-        jLabel1.setText("         Relatórios");
+        jLabel1.setText("    Relatório de Produtos");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -41,7 +56,7 @@ public class FormRelEstoque extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addContainerGap(206, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -77,7 +92,7 @@ public class FormRelEstoque extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addComponent(jFechar, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
@@ -100,13 +115,19 @@ public class FormRelEstoque extends javax.swing.JDialog {
     }//GEN-LAST:event_jFecharMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-//        ArrayList<Estoque> pct = new EstoqueDAO().BuscarRelatorio();
-//
-//        for (int i = 0; i < pct.size(); i++) {
-//            Estoque estoque = pct.get(i);
-//            jRelatorio.append(estoque.toString());
-//            jRelatorio.append("-------------------------------\n");
-//        }
+
+        List<Estoque> estoques;
+        try {
+            estoques = estoqueDao.listAllProdutos();
+
+            for (Estoque est : estoques) {                
+                jRelatorio.append("Produto: " + est.getProduto()+ "\n");
+                jRelatorio.append("Quantidade: " + String.valueOf(est.getQuantidade()+ "\n"));
+                jRelatorio.append("-------------------------------\n");                
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowOpened
 
 private void jRelatorioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRelatorioMouseClicked

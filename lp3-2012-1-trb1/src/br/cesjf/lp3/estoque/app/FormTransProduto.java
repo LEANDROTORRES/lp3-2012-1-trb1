@@ -212,6 +212,7 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         try {
             estoqueDao.transferir(String.valueOf(jFilialOrigem.getSelectedItem()), estoque);
+            JOptionPane.showMessageDialog(null, "Produto Trnsferido Com Sucesso!", "Transferência Realizada", JOptionPane.INFORMATION_MESSAGE);
             LimparCampos();
         } catch (Exception ex) {
             Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
@@ -238,7 +239,7 @@ private void jTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
 
         List<Estoque> estoques;
         try {
-            estoques = estoqueDao.listAll();
+            estoques = estoqueDao.listAllCombo();
 
             for (Estoque est : estoques) {
                 jFilialOrigem.addItem(est.getFilial());

@@ -60,7 +60,7 @@ public class formPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jRelGeral.setText("Geral");
+        jRelGeral.setText("Lista de Produtos");
         jRelGeral.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRelGeralActionPerformed(evt);
@@ -110,7 +110,7 @@ private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }//GEN-LAST:event_cTransferirActionPerformed
 
     private void jDesFilialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDesFilialActionPerformed
-        FormDesFilial frp = new FormDesFilial(this, true);
+        FormDesativarFilial frp = new FormDesativarFilial();
         frp.setLocationRelativeTo(null);
         frp.setVisible(true);
     }//GEN-LAST:event_jDesFilialActionPerformed
