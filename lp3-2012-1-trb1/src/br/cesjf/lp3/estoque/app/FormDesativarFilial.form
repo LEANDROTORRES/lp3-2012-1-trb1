@@ -54,7 +54,7 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jArvore" min="-2" pref="168" max="-2" attributes="0"/>
+                  <Component id="jFilialOrigem" min="-2" pref="168" max="-2" attributes="0"/>
                   <EmptySpace pref="434" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -63,14 +63,14 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jArvore" min="-2" pref="124" max="-2" attributes="0"/>
+                  <Component id="jFilialOrigem" min="-2" pref="124" max="-2" attributes="0"/>
                   <EmptySpace pref="351" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Container class="javax.swing.JScrollPane" name="jArvore">
+        <Container class="javax.swing.JScrollPane" name="jFilialOrigem">
           <AuxValues>
             <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
           </AuxValues>
@@ -83,6 +83,11 @@
                   <TreeModel code="Estoque&#xa; Filial&#xa;  Produto - Quantidade"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTree1MouseClicked"/>
+                <EventHandler event="treeExpanded" listener="javax.swing.event.TreeExpansionListener" parameters="javax.swing.event.TreeExpansionEvent" handler="jTree1TreeExpanded"/>
+                <EventHandler event="valueChanged" listener="javax.swing.event.TreeSelectionListener" parameters="javax.swing.event.TreeSelectionEvent" handler="jTree1ValueChanged"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
