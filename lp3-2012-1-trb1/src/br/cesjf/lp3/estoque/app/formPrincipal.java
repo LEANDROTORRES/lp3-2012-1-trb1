@@ -19,6 +19,7 @@ public class formPrincipal extends javax.swing.JFrame {
         jDesFilial = new javax.swing.JMenuItem();
         jRelatorio = new javax.swing.JMenu();
         jRelGeral = new javax.swing.JMenuItem();
+        jRelEstoques = new javax.swing.JMenuItem();
         jSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -68,6 +69,14 @@ public class formPrincipal extends javax.swing.JFrame {
         });
         jRelatorio.add(jRelGeral);
 
+        jRelEstoques.setText("Listar Estoques");
+        jRelEstoques.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRelEstoquesActionPerformed(evt);
+            }
+        });
+        jRelatorio.add(jRelEstoques);
+
         jMenuBar1.add(jRelatorio);
 
         jSair.setText("Sair");
@@ -110,7 +119,7 @@ private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }//GEN-LAST:event_cTransferirActionPerformed
 
     private void jDesFilialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jDesFilialActionPerformed
-        FormDesativarFilial frp = new FormDesativarFilial();
+        FormDesFilial frp = new FormDesFilial(this, true);
         frp.setLocationRelativeTo(null);
         frp.setVisible(true);
     }//GEN-LAST:event_jDesFilialActionPerformed
@@ -119,10 +128,16 @@ private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     }//GEN-LAST:event_jRelatorioActionPerformed
 
     private void jRelGeralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelGeralActionPerformed
-        FormRelEstoque frp = new FormRelEstoque(this, true);
+        FormRelProdutos frp = new FormRelProdutos(this, true);
         frp.setLocationRelativeTo(null);
         frp.setVisible(true);
     }//GEN-LAST:event_jRelGeralActionPerformed
+
+    private void jRelEstoquesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelEstoquesActionPerformed
+        FormRelEstoques frp = new FormRelEstoques();
+        frp.setLocationRelativeTo(null);
+        frp.setVisible(true);
+    }//GEN-LAST:event_jRelEstoquesActionPerformed
    
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -138,6 +153,7 @@ private void cCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private javax.swing.JMenuItem jDesFilial;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jRelEstoques;
     private javax.swing.JMenuItem jRelGeral;
     private javax.swing.JMenu jRelatorio;
     private javax.swing.JMenu jSair;

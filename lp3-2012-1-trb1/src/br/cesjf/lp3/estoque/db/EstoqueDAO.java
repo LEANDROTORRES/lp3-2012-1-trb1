@@ -18,6 +18,7 @@ public class EstoqueDAO {
     private PreparedStatement operacaoListar;
     private PreparedStatement operacaoListarCombo;
     private PreparedStatement operacaoListarProdutos;
+    private PreparedStatement operacaoListarProdutosFilial;
 
     public EstoqueDAO() throws Exception {
         conexao = ConexaoJavaDB.getConnection();
@@ -28,6 +29,7 @@ public class EstoqueDAO {
         operacaoListar = conexao.prepareStatement("SELECT * FROM estoque ORDER BY filial");
         operacaoListarCombo = conexao.prepareStatement("SELECT DISTINCT(filial) FROM estoque");
         operacaoListarProdutos = conexao.prepareStatement("SELECT produto, SUM(quantidade) AS quantidade FROM estoque GROUP BY produto");
+        operacaoListarProdutosFilial = conexao.prepareStatement("SELECT * FROM estoque WHERE filial = ?");
     }
 
     public void cadastrar(Estoque estoque) throws Exception {
@@ -102,6 +104,20 @@ public class EstoqueDAO {
             Estoque estoque = new Estoque();
             estoque.setProduto(resultados.getString("produto"));
             estoque.setQuantidade(Integer.parseInt(resultados.getString("quantidade")));
+            reservas.add(estoque);
+        }
+        return reservas;
+    }
+    
+    public List<Estoque> listProdutoFilial(String filial) throws Exception {
+        operacaoListarProdutosFilial.clearParameters();
+        operacaoListarProdutosFilial.setString(1, filial);
+        ResultSet resultados = operacaoListarProdutosFilial.executeQuery();
+        List<Estoque> reservas = new ArrayList<Estoque>();
+        while (resultados.next()) {
+            Estoque estoque = new Estoque();
+            estoque.setProduto(resultados.getString("produto"));
+            estoque.setQuantidade(resultados.getInt("quantidade"));
             reservas.add(estoque);
         }
         return reservas;

@@ -54,8 +54,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jFilialOrigem" min="-2" pref="168" max="-2" attributes="0"/>
-                  <EmptySpace pref="434" max="32767" attributes="0"/>
+                  <Component id="jFilialOrigem" min="-2" pref="407" max="-2" attributes="0"/>
+                  <EmptySpace pref="195" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -63,8 +63,8 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jFilialOrigem" min="-2" pref="124" max="-2" attributes="0"/>
-                  <EmptySpace pref="351" max="32767" attributes="0"/>
+                  <Component id="jFilialOrigem" min="-2" pref="330" max="-2" attributes="0"/>
+                  <EmptySpace pref="145" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>

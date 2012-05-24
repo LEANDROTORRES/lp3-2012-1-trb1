@@ -7,12 +7,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class FormRelEstoque extends javax.swing.JDialog {
+public class FormRelProdutos extends javax.swing.JDialog {
     
     Estoque estoque;
     EstoqueDAO estoqueDao;
 
-    public FormRelEstoque(java.awt.Frame parent, boolean modal) {
+    public FormRelProdutos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
@@ -136,7 +136,7 @@ private void jRelatorioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                FormRelEstoque dialog = new FormRelEstoque(new javax.swing.JFrame(), true);
+                FormRelProdutos dialog = new FormRelProdutos(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                     public void windowClosing(java.awt.event.WindowEvent e) {

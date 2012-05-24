@@ -9,31 +9,40 @@ import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-public class FormDesativarFilial extends javax.swing.JFrame {
+public class FormRelEstoques extends javax.swing.JFrame {
 
     private JTree tree;
     private DefaultMutableTreeNode noPai;
     Estoque estoque;
     EstoqueDAO estoqueDao;
+    EstoqueDAO estoqueDAO2;
 
-    public FormDesativarFilial() {
+    public FormRelEstoques() {
         initComponents();
         CriaArvore();
-        
+
         try {
             estoque = new Estoque();
             estoqueDao = new EstoqueDAO();
+            estoqueDAO2 = new EstoqueDAO();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
         }
 
 
         List<Estoque> estoques;
+        List<Estoque> estoques2;
         try {
             estoques = estoqueDao.listAllCombo();
 
             for (Estoque est : estoques) {
-                addFilho(est.getFilial());                
+                addFilho(est.getFilial());
+                
+                estoques2 = estoqueDAO2.listProdutoFilial(est.getFilial());
+                for (Estoque est2 : estoques) {
+                    addFilho(est2.getFilial());
+                }
+                
             }
         } catch (Exception ex) {
             Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
@@ -49,7 +58,7 @@ public class FormDesativarFilial extends javax.swing.JFrame {
 
     private void addFilho(String no) {
         DefaultMutableTreeNode filho = new DefaultMutableTreeNode(no);
-        noPai.add(filho);        
+        noPai.add(filho);
     }
 
     @SuppressWarnings("unchecked")
@@ -95,15 +104,15 @@ public class FormDesativarFilial extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jFilialOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(434, Short.MAX_VALUE))
+                .addComponent(jFilialOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(195, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jFilialOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(351, Short.MAX_VALUE))
+                .addComponent(jFilialOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(145, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -127,15 +136,12 @@ public class FormDesativarFilial extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTree1ValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_jTree1ValueChanged
-     
     }//GEN-LAST:event_jTree1ValueChanged
 
     private void jTree1TreeExpanded(javax.swing.event.TreeExpansionEvent evt) {//GEN-FIRST:event_jTree1TreeExpanded
-         
     }//GEN-LAST:event_jTree1TreeExpanded
 
     private void jTree1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTree1MouseClicked
-        
     }//GEN-LAST:event_jTree1MouseClicked
 
     public static void main(String args[]) {
@@ -143,7 +149,7 @@ public class FormDesativarFilial extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
             public void run() {
-                new FormDesativarFilial().setVisible(true);
+                new FormRelEstoques().setVisible(true);
             }
         });
 

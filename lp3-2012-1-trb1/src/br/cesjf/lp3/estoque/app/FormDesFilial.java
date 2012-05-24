@@ -1,11 +1,29 @@
 package br.cesjf.lp3.estoque.app;
 
-public class FormDesFilial extends javax.swing.JDialog {    
+import br.cesjf.lp3.estoque.classe.Estoque;
+import br.cesjf.lp3.estoque.db.EstoqueDAO;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
+public class FormDesFilial extends javax.swing.JDialog {   
+    
+    Estoque estoque;
+    EstoqueDAO estoqueDao;
+
 
     public FormDesFilial(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();        
         setLocationRelativeTo(null);
+        
+        try {
+            estoque = new Estoque();
+            estoqueDao = new EstoqueDAO();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
+        }
     }   
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -46,7 +64,7 @@ public class FormDesFilial extends javax.swing.JDialog {
                     .addComponent(jLabel2)
                     .addComponent(jFilialOrigem, 0, 355, Short.MAX_VALUE)
                     .addComponent(jFilialDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,21 +103,21 @@ public class FormDesFilial extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 282, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jGravar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jGravar))
@@ -114,14 +132,16 @@ public class FormDesFilial extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton2MouseClicked
 
 private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jGravarActionPerformed
-//    if (jFilialOrigem.getSelectedItem().equals(jFilialDestino.getSelectedItem())) {
-//        JOptionPane.showMessageDialog(null, "A Filial de Destino Deve ser Diferente da Filial de Origem!",
-//                "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
-//
-//    } else {
-//        Estoque e1 = new Estoque();
-//        e1.setFilial(String.valueOf(jFilialOrigem.getSelectedItem()));
-//
+    if (jFilialOrigem.getSelectedItem().equals(jFilialDestino.getSelectedItem())) {
+        JOptionPane.showMessageDialog(null, "A Filial de Destino Deve ser Diferente da Filial de Origem!",
+                "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
+
+    } else {        
+        estoque.setFilial(String.valueOf(jFilialOrigem.getSelectedItem()));
+        
+//        List<Estoque> estoques;
+//        estoques = estoqueDao.listAllProdutos();
+//        
 //        ArrayList<Estoque> est = new EstoqueDAO().Buscar(e1);
 //
 //        for (int i = 0; i < est.size(); i++) {
@@ -162,20 +182,24 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 //                "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
 //
 //        LimparCampos();
-//    }
+    }
 }//GEN-LAST:event_jGravarActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-//        ArrayList<Estoque> pct = new EstoqueDAO().BuscarTodos();
-//
-//        jFilialOrigem.removeAllItems();
-//        jFilialDestino.removeAllItems();
-//
-//        for (int i = 0; i < pct.size(); i++) {
-//            Estoque filial = pct.get(i);
-//            jFilialOrigem.addItem(filial.getFilial());
-//            jFilialDestino.addItem(filial.getFilial());
-//        }
+        jFilialOrigem.removeAllItems();
+        jFilialDestino.removeAllItems();
+
+        List<Estoque> estoques;
+        try {
+            estoques = estoqueDao.listAllCombo();
+
+            for (Estoque est : estoques) {
+                jFilialOrigem.addItem(est.getFilial());
+                jFilialDestino.addItem(est.getFilial());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowOpened
 
     /**
