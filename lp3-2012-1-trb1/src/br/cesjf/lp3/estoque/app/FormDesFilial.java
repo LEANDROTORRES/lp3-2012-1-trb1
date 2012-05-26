@@ -7,24 +7,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class FormDesFilial extends javax.swing.JDialog {   
-    
+public class FormDesFilial extends javax.swing.JDialog {
+
     Estoque estoque;
     EstoqueDAO estoqueDao;
 
-
     public FormDesFilial(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();        
+        initComponents();
         setLocationRelativeTo(null);
-        
+
         try {
             estoque = new Estoque();
             estoqueDao = new EstoqueDAO();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
         }
-    }   
+    }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -102,14 +101,17 @@ public class FormDesFilial extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jGravar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jGravar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -135,53 +137,22 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     if (jFilialOrigem.getSelectedItem().equals(jFilialDestino.getSelectedItem())) {
         JOptionPane.showMessageDialog(null, "A Filial de Destino Deve ser Diferente da Filial de Origem!",
                 "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
+    } else {
 
-    } else {        
-        estoque.setFilial(String.valueOf(jFilialOrigem.getSelectedItem()));
+        List<Estoque> estoques;
+        try {
+            estoques = estoqueDao.listProdutoFilial(jFilialOrigem.getSelectedItem().toString());
+            for (Estoque est : estoques) {
+                estoqueDao.desativar(est, jFilialDestino.getSelectedItem().toString());
+            }
+            
+            JOptionPane.showMessageDialog(null, "Filial Desativada com Sucesso!",
+                "Sucesso", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception ex) {
+            Logger.getLogger(FormDesFilial.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-//        List<Estoque> estoques;
-//        estoques = estoqueDao.listAllProdutos();
-//        
-//        ArrayList<Estoque> est = new EstoqueDAO().Buscar(e1);
-//
-//        for (int i = 0; i < est.size(); i++) {
-//            Estoque orig = est.get(i);
-//
-//            Estoque dest = new Estoque();
-//            dest.setFilial(String.valueOf(jFilialDestino.getSelectedItem()));
-//            dest.setProduto(orig.getProduto());
-//
-//            Estoque e2 = new EstoqueDAO().BuscarConsulta(dest);
-//
-//            if (e2 != null) {
-//                Estoque e3 = new Estoque();
-//                e3.setFilial(String.valueOf(jFilialDestino.getSelectedItem()));
-//                e3.setProduto(orig.getProduto());
-//                e3.setQuantidade(orig.getQuantidade() + e2.getQuantidade());
-//                new EstoqueDAO().Alterar(e3);
-//
-//                Estoque e4 = new Estoque();
-//                e4.setFilial(String.valueOf(jFilialOrigem.getSelectedItem()));
-//                e4.setProduto(orig.getProduto());
-//                new EstoqueDAO().Apagar(e4);
-//                
-//            } else {
-//                Estoque e3 = new Estoque();
-//                e3.setFilial(String.valueOf(jFilialDestino.getSelectedItem()));
-//                e3.setProduto(orig.getProduto());
-//                e3.setQuantidade(orig.getQuantidade());
-//                new EstoqueDAO().Inserir(e3);
-//
-//                Estoque e4 = new Estoque();
-//                e4.setFilial(String.valueOf(jFilialOrigem.getSelectedItem()));
-//                e4.setProduto(orig.getProduto());
-//                new EstoqueDAO().Apagar(e4);               
-//            }
-//        }
-//        JOptionPane.showMessageDialog(null, "Dasativação Concluída!",
-//                "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
-//
-//        LimparCampos();
+        formWindowOpened(null);
     }
 }//GEN-LAST:event_jGravarActionPerformed
 
@@ -208,8 +179,8 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
-            public void run() {                
-                FormDesFilial dialog = new FormDesFilial(new javax.swing.JFrame(), true);                
+            public void run() {
+                FormDesFilial dialog = new FormDesFilial(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
 
                     public void windowClosing(java.awt.event.WindowEvent e) {

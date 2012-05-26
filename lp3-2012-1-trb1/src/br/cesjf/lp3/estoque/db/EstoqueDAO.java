@@ -116,6 +116,7 @@ public class EstoqueDAO {
         List<Estoque> reservas = new ArrayList<Estoque>();
         while (resultados.next()) {
             Estoque estoque = new Estoque();
+            estoque.setFilial(filial);
             estoque.setProduto(resultados.getString("produto"));
             estoque.setQuantidade(resultados.getInt("quantidade"));
             reservas.add(estoque);
@@ -168,4 +169,39 @@ public class EstoqueDAO {
             conexao.rollback();
         }
     }
+    
+    
+    public void desativar(Estoque estoque, String filialDestino) throws Exception {
+
+        try {
+            conexao.setAutoCommit(false);
+
+            Estoque estoqueD = new Estoque();
+            estoqueD.setFilial(filialDestino);
+            estoqueD.setProduto(estoque.getProduto());
+            Estoque estD = busca(estoqueD);
+            
+            if (estD != null) {
+                Estoque estoqueDestino = new Estoque();
+                estoqueDestino.setFilial(filialDestino);
+                estoqueDestino.setProduto(estoque.getProduto());
+                estoqueDestino.setQuantidade(estoque.getQuantidade() + estD.getQuantidade());
+                atualizar(estoqueDestino);
+            } else {
+                Estoque estoqueDestino = new Estoque();
+                estoqueDestino.setFilial(filialDestino);
+                estoqueDestino.setProduto(estoque.getProduto());
+                estoqueDestino.setQuantidade(estoque.getQuantidade());
+                cadastrar(estoqueDestino);
+            }            
+            excluir(estoque);
+
+            conexao.commit();
+
+        } catch (SQLException e) {
+            conexao.rollback();
+        }
+    }
+    
+    
 }
