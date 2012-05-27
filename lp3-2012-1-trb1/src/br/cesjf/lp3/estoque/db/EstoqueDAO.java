@@ -96,7 +96,7 @@ public class EstoqueDAO {
         }
         return reservas;
     }
-    
+
     public List<Estoque> listAllProdutos() throws Exception {
         ResultSet resultados = operacaoListarProdutos.executeQuery();
         List<Estoque> reservas = new ArrayList<Estoque>();
@@ -108,7 +108,7 @@ public class EstoqueDAO {
         }
         return reservas;
     }
-    
+
     public List<Estoque> listProdutoFilial(String filial) throws Exception {
         operacaoListarProdutosFilial.clearParameters();
         operacaoListarProdutosFilial.setString(1, filial);
@@ -125,11 +125,19 @@ public class EstoqueDAO {
     }
 
     public void cad(Estoque estoque) throws Exception {
-        Estoque est = busca(estoque);
-        if (est != null) {
-            atualizar(estoque);
-        } else {
-            cadastrar(estoque);
+
+        try {
+            conexao.setAutoCommit(false);
+
+            Estoque est = busca(estoque);
+            if (est != null) {
+                atualizar(estoque);
+            } else {
+                cadastrar(estoque);
+            }
+            conexao.commit();
+        } catch (SQLException e) {
+            conexao.rollback();
         }
     }
 
@@ -169,8 +177,7 @@ public class EstoqueDAO {
             conexao.rollback();
         }
     }
-    
-    
+
     public void desativar(Estoque estoque, String filialDestino) throws Exception {
 
         try {
@@ -180,7 +187,7 @@ public class EstoqueDAO {
             estoqueD.setFilial(filialDestino);
             estoqueD.setProduto(estoque.getProduto());
             Estoque estD = busca(estoqueD);
-            
+
             if (estD != null) {
                 Estoque estoqueDestino = new Estoque();
                 estoqueDestino.setFilial(filialDestino);
@@ -193,7 +200,7 @@ public class EstoqueDAO {
                 estoqueDestino.setProduto(estoque.getProduto());
                 estoqueDestino.setQuantidade(estoque.getQuantidade());
                 cadastrar(estoqueDestino);
-            }            
+            }
             excluir(estoque);
 
             conexao.commit();
@@ -202,6 +209,4 @@ public class EstoqueDAO {
             conexao.rollback();
         }
     }
-    
-    
 }

@@ -23,7 +23,7 @@ public class formPrincipal extends javax.swing.JFrame {
         jSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sistemas de Informação");
+        setTitle("Sistema de Controle de Estoques");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jMenu1.setText("Ações");
