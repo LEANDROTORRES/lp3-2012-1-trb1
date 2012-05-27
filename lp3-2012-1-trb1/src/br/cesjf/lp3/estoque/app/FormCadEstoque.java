@@ -2,7 +2,11 @@ package br.cesjf.lp3.estoque.app;
 
 import br.cesjf.lp3.estoque.classe.Estoque;
 import br.cesjf.lp3.estoque.db.EstoqueDAO;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class FormCadEstoque extends javax.swing.JDialog {
 
@@ -19,6 +23,7 @@ public class FormCadEstoque extends javax.swing.JDialog {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
         }
+        atualizarTblEstoque();
     }
 
     public void LimparCampos() {
@@ -42,6 +47,8 @@ public class FormCadEstoque extends javax.swing.JDialog {
         jGravar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jExcluir = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblEstoque = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -120,11 +127,46 @@ public class FormCadEstoque extends javax.swing.JDialog {
 
         jExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/excluir.png"))); // NOI18N
         jExcluir.setText("Excluir");
+        jExcluir.setEnabled(false);
         jExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jExcluirActionPerformed(evt);
             }
         });
+
+        tblEstoque.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Filial", "Produto", "Quantidade"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblEstoque.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblEstoque.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEstoqueMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblEstoque);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -132,15 +174,19 @@ public class FormCadEstoque extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jGravar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jExcluir)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jExcluir)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jGravar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,11 +195,13 @@ public class FormCadEstoque extends javax.swing.JDialog {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jExcluir)
-                        .addComponent(jGravar)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton2)
+                        .addComponent(jGravar))
+                    .addComponent(jExcluir))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
@@ -170,7 +218,7 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         JOptionPane.showMessageDialog(null, "Preenchimento obrigatório de todos os campos!",
                 "Atenção", JOptionPane.OK_OPTION + JOptionPane.INFORMATION_MESSAGE);
     } else {
-        
+
         estoque.setFilial(jFilial.getText());
         estoque.setProduto(jProduto.getText());
         estoque.setQuantidade(Integer.parseInt(jQuantidade.getText()));
@@ -183,6 +231,9 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             JOptionPane.showMessageDialog(null, "Não é possível cadastrar o Produto!\n" + ex.getMessage(), "Erro ao cadastrar Produto", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    jExcluir.setEnabled(false);
+    atualizarTblEstoque();
 }//GEN-LAST:event_jGravarActionPerformed
 
     private void jExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jExcluirActionPerformed
@@ -197,22 +248,38 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Não é possível excluir o Produto!\n" + ex.getMessage(), "Erro ao excluir Produto", JOptionPane.ERROR_MESSAGE);
         }
+        
+        jExcluir.setEnabled(false);
+        atualizarTblEstoque();
     }//GEN-LAST:event_jExcluirActionPerformed
 
     private void jProdutoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jProdutoFocusLost
-//        estoque.setFilial(jFilial.getText());
-//        estoque.setProduto(jProduto.getText());
-//        
-//        try {
-//            estoque = estoqueDao.busca(estoque);
-//        } catch (Exception ex) {
-//            estoque = null;
-//        }
-//
-//        if (estoque != null) {
-//            jQuantidade.setText(String.valueOf(estoque.getQuantidade()));
-//        }        
     }//GEN-LAST:event_jProdutoFocusLost
+
+    private void tblEstoqueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEstoqueMouseClicked
+        int linha = tblEstoque.getSelectedRow();
+        String filial = (String) tblEstoque.getModel().getValueAt(linha, 0);
+        String produto = (String) tblEstoque.getModel().getValueAt(linha, 1);   
+        
+        estoque.setFilial(filial);
+        estoque.setProduto(produto);
+
+        try {
+            estoque = estoqueDao.busca(estoque);           
+            
+            jFilial.setText(estoque.getFilial());
+            jProduto.setText(estoque.getProduto());
+            jQuantidade.setText(String.valueOf(estoque.getQuantidade()));            
+            
+            tblEstoque.getSelectedRow();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível recuperar o registro!\n" + ex.getMessage(), "Erro ao buscar o registro", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(FormCadEstoque.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+        
+        jExcluir.setEnabled(true);
+    }//GEN-LAST:event_tblEstoqueMouseClicked
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
 
@@ -240,5 +307,28 @@ private void jGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jProduto;
     private javax.swing.JTextField jQuantidade;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblEstoque;
     // End of variables declaration//GEN-END:variables
+
+    private void atualizarTblEstoque() {
+        DefaultTableModel tm = (DefaultTableModel) tblEstoque.getModel();
+        tm.getDataVector().removeAllElements();
+
+        try {
+            List<Estoque> estoques = estoqueDao.listAll();
+            for (Estoque est : estoques) {
+                tm.addRow(new Object[]{
+                            est.getFilial(),
+                            est.getProduto(),
+                            est.getQuantidade()
+                        });
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível listar os registros!\n" + ex.getMessage(), "Erro ao listar", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(FormCadEstoque.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+
+    }
 }

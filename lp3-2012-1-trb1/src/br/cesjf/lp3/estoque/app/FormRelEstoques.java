@@ -16,6 +16,8 @@ public class FormRelEstoques extends javax.swing.JFrame {
     Estoque estoque;
     EstoqueDAO estoqueDao;
     EstoqueDAO estoqueDAO2;
+    List<Estoque> estoques;
+    List<Estoque> estoques2;
 
     public FormRelEstoques() {
         initComponents();
@@ -28,21 +30,12 @@ public class FormRelEstoques extends javax.swing.JFrame {
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco!", "Erro de Conexão", JOptionPane.ERROR_MESSAGE);
         }
-
-
-        List<Estoque> estoques;
-        List<Estoque> estoques2;
+        
         try {
             estoques = estoqueDao.listAllCombo();
 
             for (Estoque est : estoques) {
                 addFilho(est.getFilial());
-                
-                estoques2 = estoqueDAO2.listProdutoFilial(est.getFilial());
-                for (Estoque est2 : estoques) {
-                    addFilho(est2.getFilial());
-                }
-                
             }
         } catch (Exception ex) {
             Logger.getLogger(FormTransProduto.class.getName()).log(Level.SEVERE, null, ex);
@@ -57,8 +50,18 @@ public class FormRelEstoques extends javax.swing.JFrame {
     }
 
     private void addFilho(String no) {
-        DefaultMutableTreeNode filho = new DefaultMutableTreeNode(no);
+        DefaultMutableTreeNode filho = new DefaultMutableTreeNode(no);        
         noPai.add(filho);
+
+        try {
+            estoques2 = estoqueDAO2.listProdutoFilial(no);
+            for (Estoque est2 : estoques2) {
+                DefaultMutableTreeNode neto = new DefaultMutableTreeNode(est2.getProduto() + " - " + est2.getQuantidade());
+                filho.add(neto);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(FormRelEstoques.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -102,17 +105,17 @@ public class FormRelEstoques extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jFilialOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 407, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(195, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(144, Short.MAX_VALUE)
                 .addComponent(jFilialOrigem, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(145, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -152,9 +155,6 @@ public class FormRelEstoques extends javax.swing.JFrame {
                 new FormRelEstoques().setVisible(true);
             }
         });
-
-
-
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jFilialOrigem;
