@@ -1,16 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.cesjf.lp3.estoque.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-/**
- *
- * @author curso
- */
 public class ConexaoJavaDB {
     private static Connection conexao = null;
     
